@@ -35,6 +35,9 @@
 #include "platformmouseparser.h"
 #include "usbmouseparser.h"
 #include "adbkbdparser.h"
+#include "rp2040_serial.h"
+
+using rp2040_serial::Serial;
 
 #define kModCmd 1
 #define kModOpt 2
@@ -64,6 +67,8 @@ void tuh_hid_mount_cb(uint8_t dev_addr, uint8_t instance, uint8_t const* desc_re
   (void)desc_report;
   (void)desc_len;
 
+  Serial.println("HID mounted");
+
   uint8_t const itf_protocol = tuh_hid_interface_protocol(dev_addr, instance);
 
   uint16_t vid, pid;
@@ -82,10 +87,12 @@ void tuh_hid_mount_cb(uint8_t dev_addr, uint8_t instance, uint8_t const* desc_re
       if(itf_protocol == HID_ITF_PROTOCOL_KEYBOARD) 
       {
         KeyboardPrs.AddKeyboard(dev_addr, instance);
+        Serial.println("Keyboard added");
         led_blink(2);
       } 
       else // protocol is mouse
       {
+        Serial.println("Mouse added");
         led_blink(3);
       }
     }
@@ -95,6 +102,7 @@ void tuh_hid_mount_cb(uint8_t dev_addr, uint8_t instance, uint8_t const* desc_re
 // Invoked when device with hid interface is un-mounted
 void tuh_hid_umount_cb(uint8_t dev_addr, uint8_t instance)
 {
+  Serial.println("HID unmounted");
   KeyboardPrs.RemoveKeyboard(dev_addr, instance);
   led_blink(1);
 }

@@ -38,7 +38,7 @@
 
 
 // Status LED GPIOs
-#define LED_GPIO     15
+#define LED_GPIO     25
 #define LED_ON()    sio_hw->gpio_set = 1 << LED_GPIO
 #define LED_OFF()   sio_hw->gpio_clr = 1 << LED_GPIO
 #define LED_SET(x)  (x ? sio_hw->gpio_set = 1 << LED_GPIO : sio_hw->gpio_clr = 1 << LED_GPIO)
